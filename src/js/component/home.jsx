@@ -2,59 +2,44 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Home = () => {
-  let isRunning = true; 
-  let intervalId; 
+  let counter = 0;
+  let intervalId = null;
 
-  const updateCounter = (counterRef) => {
-    return () => {
-      if (!isRunning) return; 
-      counterRef.current = (counterRef.current + 1) % 10000000;
-      updateDOM();
-    };
-  };
-
-  const updateDOM = () => {
-    const contadorFormateado = String(counterRef.current).padStart(7, "0");
+  const updateDigits = () => {
     const digitElements = document.querySelectorAll(".digit");
+    const counterString = counter.toString().padStart(7, "0");
 
     digitElements.forEach((digitElement, index) => {
-      const digit = parseInt(contadorFormateado[index]) || 0;
-      digitElement.textContent = digit;
+      digitElement.textContent = counterString[index];
     });
   };
 
-  const counterRef = { current: 0 };
-
-  // Iniciar el intervalo
   const startInterval = () => {
-    intervalId = setInterval(updateCounter(counterRef), 1000);
+    intervalId = setInterval(() => {
+      counter = (counter + 1) % 10000000;
+      updateDigits();
+    }, 1000);
   };
 
+  const stopInterval = () => {
+    clearInterval(intervalId);
+    intervalId = null;
+  };
 
+  const restartInterval = () => {
+    stopInterval();
+    startInterval();
+  };
+
+  const clearCounter = () => {
+    counter = 0;
+    restartInterval();
+  };
+
+  // Iniciar el intervalo cuando el componente se monta
   startInterval();
 
-  // Botón "Detener"
-  const handleStopClick = () => {
-    isRunning = false;
-    clearInterval(intervalId); 
-  };
-
-  // Botón "Reiniciar"
-  const handleRestartClick = () => {
-    isRunning = true;
-    clearInterval(intervalId);
-    startInterval(); 
-  };
-
-  // Botón "Limpiar"
-  const handleClearClick = () => {
-    isRunning = true;
-    counterRef.current = 0;
-    clearInterval(intervalId); 
-    startInterval(); 
-    updateDOM(); 
-  };
-
+  // Limpiar el intervalo al desmontar el componente
   return (
     <div className="bigDiv text-center">
       <div className="counter d-flex justify-content-center">
@@ -67,16 +52,17 @@ const Home = () => {
           </div>
         ))}
       </div>
-      <button className="stopButton m-3" onClick={handleStopClick}>Pausar</button>
-      <button className="restartButton m-3" onClick={handleRestartClick}>Seguir</button>
-      <button className="clearButton m-3" onClick={handleClearClick}>Reiniciar</button>
+      <button className="stopButton m-3" onClick={stopInterval}>
+        Pausar
+      </button>
+      <button className="restartButton m-3" onClick={restartInterval}>
+        Seguir
+      </button>
+      <button className="clearButton m-3" onClick={clearCounter}>
+        Reiniciar
+      </button>
     </div>
   );
 };
 
 export default Home;
-
-
-
-
-
