@@ -32,8 +32,9 @@ const Home = () => {
   };
 
   const clearCounter = () => {
+    stopInterval();
     counter = 0;
-    restartInterval();
+    startInterval();
   };
 
   // Iniciar el intervalo cuando el componente se monta
