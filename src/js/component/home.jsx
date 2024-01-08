@@ -5,6 +5,7 @@ const Home = () => {
   let counter = 0;
   let intervalId = null;
 
+  //Cambio numeros en contador
   const updateDigits = () => {
     const digitElements = document.querySelectorAll(".digit");
     const counterString = counter.toString().padStart(7, "0");
@@ -14,6 +15,7 @@ const Home = () => {
     });
   };
 
+  //Cambio estado de IntervalID y limitación de contador
   const startInterval = () => {
     intervalId = setInterval(() => {
       counter = (counter + 1) % 10000000;
@@ -21,32 +23,33 @@ const Home = () => {
     }, 1000);
   };
 
+  // Boton "Pausar"
   const stopInterval = () => {
     clearInterval(intervalId);
     intervalId = null;
   };
-
+// Boton "Seguir"
   const restartInterval = () => {
     stopInterval();
     startInterval();
   };
-
+// Boton "Reiniciar"
   const clearCounter = () => {
     stopInterval();
     counter = 0;
     startInterval();
   };
 
-  // Iniciar el intervalo cuando el componente se monta
+  // Iniciar el intervalo
   startInterval();
 
-  // Limpiar el intervalo al desmontar el componente
   return (
     <div className="bigDiv text-center">
       <div className="counter d-flex justify-content-center">
         <div className="clock">
           <FontAwesomeIcon icon="fa-regular fa-clock" />
-        </div>
+        </div> 
+        {/* Creación de array */}
         {[...Array(7)].map((_, index) => (
           <div key={index} className={`digit digit${index + 1}`}>
             0
