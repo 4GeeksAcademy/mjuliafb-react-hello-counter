@@ -13,4 +13,5 @@ import Home from "./component/home.jsx";
 //import icons
 library.add(farFaClock )
 //render your react application
+
 ReactDOM.render(<Home />, document.querySelector("#app"));
